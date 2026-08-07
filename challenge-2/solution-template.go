@@ -23,10 +23,8 @@ func main() {
 // ReverseString returns the reversed string of s.
 func ReverseString(s string) string {
 	runer := []rune(s)
-
 	for i, j := 0, len(runer)-1; i < j; i, j = i+1, j-1 {
 		runer[i], runer[j] = runer[j], runer[i]
 	}
-
 	return string(runer)
 }
