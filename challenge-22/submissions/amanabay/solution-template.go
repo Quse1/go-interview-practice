@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cmp"
 	"fmt"
 	"slices"
-	"cmp"
 )
 
 func main() {
@@ -75,7 +75,6 @@ func CoinCombination(amount int, denominations []int) map[int]int {
 			break
 		}
 	}
-
 	return combinations
 
 }

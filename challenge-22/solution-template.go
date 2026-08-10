@@ -29,6 +29,7 @@ func main() {
 // MinCoins returns the minimum number of coins needed to make the given amount.
 // If the amount cannot be made with the given denominations, return -1.
 func MinCoins(amount int, denominations []int) int {
+	
 	// TODO: Implement this function
 	return 0
 }
@@ -38,6 +39,7 @@ func MinCoins(amount int, denominations []int) int {
 // coins used for each denomination.
 // If the amount cannot be made with the given denominations, return an empty map.
 func CoinCombination(amount int, denominations []int) map[int]int {
+
 	// TODO: Implement this function
 	return nil
 }
