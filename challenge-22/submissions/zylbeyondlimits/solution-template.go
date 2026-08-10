@@ -34,32 +34,18 @@ func main() {
 // MinCoins returns the minimum number of coins needed to make the given amount.
 // If the amount cannot be made with the given denominations, return -1.
 func MinCoins(amount int, denominations []int) int {
-	count := 0
-	remaining := amount
-
-	// 贪心算法：从最大面额（切片末尾）开始向前遍历
-	for i := len(denominations) - 1; i >= 0; i-- {
-		coin := denominations[i]
-		
-		// 只要剩余金额大于等于当前硬币面额
-		if remaining >= coin {
-			// 使用除法计算当前面额需要几枚
-			num := remaining / coin
-			
-			// 累加硬币数量
-			count += num
-			
-			// 更新剩余金额 (取余数)
-			remaining %= coin
+	var sum int = amount
+	var totalCount int
+	for _, num := range denominations {
+		if sum >= num {
+			totalCount = sum / num
+			sum %= num
 		}
 	}
-
-	// 题目要求：如果无法凑出该金额，返回 -1
-	if remaining != 0 {
+	if sum != 0 {
 		return -1
 	}
-
-	return count
+	return totalCount
 }
 
 // CoinCombination returns a map with the specific combination of coins that gives
