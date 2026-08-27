@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 func main() {
@@ -39,62 +38,90 @@ func main() {
 	}
 }
 
-// NaivePatternMatch performs a brute force search for pattern in text.
-// Returns a slice of all starting indices where the pattern is found.
 func NaivePatternMatch(text, pattern string) []int {
 	n, m := len(text), len(pattern)
-	//founded := make([]int, m)
-	for i := 0; i <= n-m; i++ {
-		j := 0
-		for j < m && text[i+j] == pattern[j] {
-			j++
-
-		}
-		if j == m {
-			return []int{i}
-		}
+	founded := []int{}
+	
+	if n == 0 || m == 0 || m > n{
+	    return []int{}
 	}
-	// TODO: Implement this function
-	return nil
+	
+	for i:=0; i <= n-m; i++ {
+	    j:=0
+	    for j < m && text[i+j] == pattern[j] {
+	        j++
+	    }
+	    if j == m  {
+	        founded = append(founded, i)
+	    }
+	}
+	if len(founded) == 0 {
+	    return []int{}
+	}
+	return founded
 }
 
 func ComputePrefix(pattern string) []int {
+	length := 0
 	m := len(pattern)
-	pi := make([]int, m)
-	for i := 1; i < m; i++ {
-		j := pi[i-1]
-		for j > 0 && pattern[i] != pattern[j] {
-			j = pi[j-1]
+	lps := make([]int, m)
+	lps[0] = 0
+
+	i := 1
+
+	for i < m {
+		if pattern[i] == pattern[length] {
+			length++
+			lps[i] = length
+			i++
+		} else {
+			if length != 0 {
+				length = lps[length-1]
+			} else {
+				lps[i] = 0
+				i++
+			}
 		}
-		if pattern[i] == pattern[j] {
-			j++
-		}
-		pi[i] = j
 	}
-	return pi
+	if len(lps) == 0 {
+		return []int{}
+	}
+	return lps
 }
 
 // KMPSearch implements the Knuth-Morris-Pratt algorithm to find pattern in text.
 // Returns a slice of all starting indices where the pattern is found.
 func KMPSearch(text, pattern string) []int {
-	pi := ComputePrefix(pattern)
-	m := len(text)
-	matches := []int{}
-	j := 0
-	for i := 0; i < m; i++ {
-		if j > 0 && text[i] != pattern[j] {
-			j = pi[j-1]
-		}
-		if text[i] == pattern[j] {
-			j++
-		}
-		if j == len(pattern) {
-			matches = append(matches, i-len(pattern)+1)
-			j = pi[j-1]
-		}
+	n, m := len(text), len(pattern)
+	if n == 0 || m == 0 || m > n {
+		return []int{}
 	}
-	// TODO: Implement this function
-	return matches
+	result := []int{}
+	lps := ComputePrefix(pattern)
+
+	i := 0
+	j := 0
+
+	for i < n {
+		if text[i] == pattern[j] {
+			i++
+			j++
+			if j == m {
+				result = append(result, i-j)
+				j = lps[j-1]
+			}
+		} else {
+				if j != 0 {
+					j = lps[j-1]
+				} else {
+					i++
+				}
+			}
+		}
+	if len(result) == 0 {
+		return []int{}
+	}
+	return result
 }
 
 // RabinKarpSearch implements the Rabin-Karp algorithm to find pattern in text.
@@ -110,21 +137,17 @@ func RabinKarpSearch(text, pattern string) []int {
 	h := 1
 	match := false
 	founded := []int{}
+	
+	if n == 0 || m == 0 || m > n {
+	    return []int{}
+	}
 
 	for i := 0; i < m-1; i++ {
 		h = (h * d) % q
 	}
 	for i := 0; i < m; i++ {
-		pat, err := strconv.Atoi(string(pattern[i]))
-		if err != nil {
-			fmt.Printf("From str to int: %s\n", err)
-		}
-		txti, err := strconv.Atoi(string(text[i]))
-		if err != nil {
-			fmt.Printf("From str to int: %s\n", err)
-		}
-		p = (d*p + pat) % q
-		t = (d*t + txti) % q
+		p = (d*p + int(pattern[i])) % q
+		t = (d*t + int(text[i])) % q
 	}
 	for i := 0; i < n-m+1; i++ {
 		if p == t {
@@ -140,19 +163,16 @@ func RabinKarpSearch(text, pattern string) []int {
 			}
 		}
 		if i < n-m {
-			txti, err := strconv.Atoi(string(text[i]))
-			if err != nil {
-				fmt.Printf("From str to int: %s\n", err)
-			}
-			txtim, err := strconv.Atoi(string(text[i+m]))
-			if err != nil {
-				fmt.Printf("From str to int: %s\n", err)
-			}
-			t = (d*(t-txti*h) + txtim) % q
+				t = (d*(t-int(text[i])*h) + int(text[i+m])) % q
 			if t < 0 {
 				t += q
 			}
 		}
 	}
+	
+	if len(founded) == 0 {
+	    return []int{}
+	}
+	
 	return founded
 }
