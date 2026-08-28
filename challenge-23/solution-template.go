@@ -71,7 +71,11 @@ func ComputePrefix(pattern string) []int {
 
 	for i < m {
 		if pattern[i] == pattern[length] {
+<<<<<<< HEAD
 			length++
+=======
+			length += 1
+>>>>>>> 634361a2d74b5e06e14026778bece2e289f13e25
 			lps[i] = length
 			i++
 		} else {
@@ -109,12 +113,21 @@ func KMPSearch(text, pattern string) []int {
 			if j == m {
 				result = append(result, i-j)
 				j = lps[j-1]
+<<<<<<< HEAD
 			}
 		} else {
 			if j != 0 {
 				j = lps[j-1]
 			} else {
 				i++
+=======
+			} else {
+				if j != 0 {
+					j = lps[j-1]
+				} else {
+					i++
+				}
+>>>>>>> 634361a2d74b5e06e14026778bece2e289f13e25
 			}
 		}
 	}

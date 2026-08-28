@@ -71,7 +71,11 @@ func ComputePrefix(pattern string) []int {
 
 	for i < m {
 		if pattern[i] == pattern[length] {
+<<<<<<< HEAD
 			length++
+=======
+			length += 1
+>>>>>>> 634361a2d74b5e06e14026778bece2e289f13e25
 			lps[i] = length
 			i++
 		} else {
@@ -95,6 +99,7 @@ func KMPSearch(text, pattern string) []int {
 	n, m := len(text), len(pattern)
 	if n == 0 || m == 0 || m > n {
 		return []int{}
+<<<<<<< HEAD
 	}
 	result := []int{}
 	lps := ComputePrefix(pattern)
@@ -118,6 +123,31 @@ func KMPSearch(text, pattern string) []int {
 				}
 			}
 		}
+=======
+	}
+	result := []int{}
+	lps := ComputePrefix(pattern)
+
+	i := 0
+	j := 0
+
+	for i < n {
+		if text[i] == pattern[j] {
+			i++
+			j++
+			if j == m {
+				result = append(result, i-j)
+				j = lps[j-1]
+			} else {
+				if j != 0 {
+					j = lps[j-1]
+				} else {
+					i++
+				}
+			}
+		}
+	}
+>>>>>>> 634361a2d74b5e06e14026778bece2e289f13e25
 	if len(result) == 0 {
 		return []int{}
 	}
@@ -163,7 +193,11 @@ func RabinKarpSearch(text, pattern string) []int {
 			}
 		}
 		if i < n-m {
+<<<<<<< HEAD
 				t = (d*(t-int(text[i])*h) + int(text[i+m])) % q
+=======
+			t = (d*(t-int(text[i])*h) + int(text[i+m])) % q
+>>>>>>> 634361a2d74b5e06e14026778bece2e289f13e25
 			if t < 0 {
 				t += q
 			}
